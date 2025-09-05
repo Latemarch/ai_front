@@ -1,7 +1,11 @@
+import GradientEffectsDemo from "@/components/GradientEffectsDemo";
+import Spiner from "@/components/Loading";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Hello World</h1>
+    <div className="h-full">
+      {/* <Spiner /> */}
+      {/* <GradientEffectsDemo /> */}
     </div>
   );
 }
