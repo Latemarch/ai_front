@@ -4,28 +4,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useChat } from "@/hooks/useChat";
 
 export default function AIChatCard({ className }: { className?: string }) {
-  const [messages, setMessages] = useState<
-    { sender: "ai" | "user"; text: string }[]
-  >([{ sender: "ai", text: "👋 Hello! I’m your AI assistant." }]);
+  const { messages, isLoading, error, sendMessage } = useChat([
+    { sender: "ai", text: "👋 안녕하세요! 저는 당신의 AI 어시스턴트입니다." }
+  ]);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { sender: "user", text: input }]);
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+    await sendMessage(input);
     setInput("");
-    setIsTyping(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "ai", text: "🤖 This is a sample AI response." },
-      ]);
-      setIsTyping(false);
-    }, 1200);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -95,7 +85,8 @@ export default function AIChatCard({ className }: { className?: string }) {
                 "px-3 py-2 rounded-xl max-w-[80%] shadow-md backdrop-blur-md",
                 msg.sender === "ai"
                   ? "bg-white/10 text-white self-start"
-                  : "bg-white/30 text-black font-semibold self-end"
+                  : "bg-white/30 text-black font-semibold self-end",
+                msg.error && "border border-red-500/50"
               )}
             >
               {msg.text}
@@ -103,7 +94,7 @@ export default function AIChatCard({ className }: { className?: string }) {
           ))}
 
           {/* AI Typing Indicator */}
-          {isTyping && (
+          {isLoading && (
             <motion.div
               className="flex items-center gap-1 px-3 py-2 rounded-xl max-w-[30%] bg-white/10 self-start"
               initial={{ opacity: 0 }}
@@ -113,6 +104,17 @@ export default function AIChatCard({ className }: { className?: string }) {
               <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
               <span className="w-2 h-2 rounded-full bg-white animate-pulse delay-200"></span>
               <span className="w-2 h-2 rounded-full bg-white animate-pulse delay-400"></span>
+            </motion.div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              className="px-3 py-2 rounded-xl bg-red-500/20 text-red-300 text-xs self-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
             </motion.div>
           )}
         </div>
@@ -128,9 +130,18 @@ export default function AIChatCard({ className }: { className?: string }) {
           />
           <button
             onClick={handleSend}
-            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            disabled={isLoading}
+            className={cn(
+              "p-2 rounded-lg transition-colors",
+              isLoading
+                ? "bg-white/5 cursor-not-allowed"
+                : "bg-white/10 hover:bg-white/20"
+            )}
           >
-            <Send className="w-4 h-4 text-white" />
+            <Send className={cn(
+              "w-4 h-4",
+              isLoading ? "text-white/50" : "text-white"
+            )} />
           </button>
         </div>
       </div>

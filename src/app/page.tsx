@@ -4,10 +4,13 @@ import Spiner from "@/components/Loading";
 
 export default function Home() {
   return (
-    <div className="flex h-full">
+    <div className="flex w-full h-full">
       {/* <Spiner /> */}
       {/* <GradientEffectsDemo /> */}
-      <AIChatCard />
+      <div className="w-1/2">
+        <AIChatCard />
+      </div>
+      <div>something</div>
     </div>
   );
 }
