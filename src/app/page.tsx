@@ -4,7 +4,7 @@ import Spiner from "@/components/Loading";
 
 export default function Home() {
   return (
-    <div className="h-full">
+    <div className="flex h-full">
       {/* <Spiner /> */}
       {/* <GradientEffectsDemo /> */}
       <AIChatCard />
