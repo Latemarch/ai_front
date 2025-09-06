@@ -21,9 +21,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(message, conversation_history, system_prompt);
-
-    // 외부 AI API 호출
     const response = await fetch("http://192.168.219.100:8001/v1/chat", {
       method: "POST",
       headers: {

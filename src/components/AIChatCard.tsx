@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,17 @@ export default function AIChatCard({ className }: { className?: string }) {
     { sender: "ai", text: "👋 안녕하세요! 저는 당신의 AI 어시스턴트입니다." }
   ]);
   const [input, setInput] = useState("");
+
+  // 파티클 속성을 메모화하여 SSR 하이드레이션 불일치 방지
+  const particleProps = useMemo(() => 
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: (i * 5) % 100, // 고정된 값 사용
+      delay: i * 0.5,
+      duration: 5 + (i % 3), // 고정된 패턴 사용
+      xOffset: (i % 3 - 1) * 50, // -50, 0, 50 패턴
+    })), []
+  );
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -49,22 +60,22 @@ export default function AIChatCard({ className }: { className?: string }) {
         /> */}
 
         {/* Floating Particles */}
-        {Array.from({ length: 20 }).map((_, i) => (
+        {particleProps.map((particle) => (
           <motion.div
-            key={i}
+            key={particle.id}
             className="absolute w-1 h-1 rounded-full bg-white/10"
             animate={{
               y: ["0%", "-140%"],
-              x: [Math.random() * 200 - 100, Math.random() * 200 - 100],
+              x: [particle.xOffset, -particle.xOffset],
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 5 + Math.random() * 3,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: i * 0.5,
+              delay: particle.delay,
               ease: "easeInOut",
             }}
-            style={{ left: `${Math.random() * 100}%`, bottom: "-10%" }}
+            style={{ left: `${particle.left}%`, bottom: "-10%" }}
           />
         ))}
 
