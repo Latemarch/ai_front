@@ -28,6 +28,12 @@ export default function AIChatCard({ className }: { className?: string }) {
     }, 1200);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+      handleSend();
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -118,7 +124,7 @@ export default function AIChatCard({ className }: { className?: string }) {
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={handleKeyDown}
           />
           <button
             onClick={handleSend}
