@@ -101,8 +101,8 @@ export default function Home() {
             key={i}
             className="absolute w-4 h-4 bg-purple-400/30 rounded-full"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * 1200,
+              y: Math.random() * 800,
             }}
             animate={{
               y: [0, -100, 0],

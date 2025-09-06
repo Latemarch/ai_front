@@ -35,45 +35,45 @@ const generateMockPrice = () => {
   const basePrice = Math.random() * 500 + 50;
   const change = (Math.random() - 0.5) * 20;
   const changePercent = (change / basePrice) * 100;
-  
+
   return {
     price: parseFloat(basePrice.toFixed(2)),
     change: parseFloat(change.toFixed(2)),
-    changePercent: parseFloat(changePercent.toFixed(2))
+    changePercent: parseFloat(changePercent.toFixed(2)),
   };
 };
 
 // Function to parse CSV data
 const parseCSVData = async (): Promise<Stock[]> => {
   try {
-    const response = await fetch('/finance/bxo_lmm.csv');
+    const response = await fetch("/finance/bxo_lmm.csv");
     const text = await response.text();
-    const lines = text.split('\n').slice(4); // Skip header lines
-    
+    const lines = text.split("\n").slice(4); // Skip header lines
+
     const stocks: Stock[] = [];
-    
+
     for (const line of lines) {
-      if (line.trim() && !line.startsWith(',')) {
-        const [symbol, name, marketMaker] = line.split(',');
-        const cleanSymbol = symbol?.replace(/"/g, '').trim();
-        const cleanName = name?.replace(/"/g, '').trim();
-        const cleanMarketMaker = marketMaker?.replace(/"/g, '').trim();
-        
+      if (line.trim() && !line.startsWith(",")) {
+        const [symbol, name, marketMaker] = line.split(",");
+        const cleanSymbol = symbol?.replace(/"/g, "").trim();
+        const cleanName = name?.replace(/"/g, "").trim();
+        const cleanMarketMaker = marketMaker?.replace(/"/g, "").trim();
+
         if (cleanSymbol && cleanName) {
           const mockPrice = generateMockPrice();
           stocks.push({
             symbol: cleanSymbol,
             name: cleanName,
             marketMaker: cleanMarketMaker,
-            ...mockPrice
+            ...mockPrice,
           });
         }
       }
     }
-    
+
     return stocks;
   } catch (error) {
-    console.error('Error loading CSV data:', error);
+    console.error("Error loading CSV data:", error);
     return [];
   }
 };
@@ -92,7 +92,7 @@ export default function SymbolSelection() {
       setAllStocks(stocks);
       setLoading(false);
     };
-    
+
     loadStocks();
   }, []);
 
@@ -104,10 +104,10 @@ export default function SymbolSelection() {
     if (!debouncedSearchTerm.trim()) {
       return allStocks.slice(0, 50); // Show first 50 when no search
     }
-    
+
     const term = debouncedSearchTerm.toLowerCase();
     return allStocks
-      .filter(stock => {
+      .filter((stock) => {
         // Early return for performance
         const symbolMatch = stock.symbol.toLowerCase().includes(term);
         if (symbolMatch) return true;
@@ -122,25 +122,25 @@ export default function SymbolSelection() {
   }, []);
 
   const toggleSymbol = (symbol: string) => {
-    setSelectedSymbols(prev =>
+    setSelectedSymbols((prev) =>
       prev.includes(symbol)
-        ? prev.filter(s => s !== symbol)
+        ? prev.filter((s) => s !== symbol)
         : [...prev, symbol]
     );
   };
 
   const removeSymbol = (symbol: string) => {
-    setSelectedSymbols(prev => prev.filter(s => s !== symbol));
+    setSelectedSymbols((prev) => prev.filter((s) => s !== symbol));
   };
 
   return (
-    <div className="w-full h-full bg-white rounded-lg shadow-lg p-6">
+    <div className="w-full h-full rounded-lg shadow-lg p-6 bg-black/20 backdrop-blur-xl">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">종목 선택</h2>
-        
+        <h2 className="text-2xl font-bold  mb-4">종목 선택</h2>
+
         {/* Search Bar */}
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-100 w-4 h-4" />
           <input
             type="text"
             placeholder="종목명 또는 심볼 검색..."
@@ -157,7 +157,7 @@ export default function SymbolSelection() {
               선택된 종목 ({selectedSymbols.length}개)
             </h3>
             <div className="flex flex-wrap gap-2">
-              {selectedSymbols.map(symbol => (
+              {selectedSymbols.map((symbol) => (
                 <motion.div
                   key={symbol}
                   initial={{ scale: 0 }}
@@ -189,59 +189,59 @@ export default function SymbolSelection() {
       {/* Stock Cards */}
       {!loading && (
         <div className="space-y-3 max-h-96 overflow-y-auto">
-          {filteredStocks.map(stock => {
-          const isSelected = selectedSymbols.includes(stock.symbol);
-          const isPositive = stock.change >= 0;
+          {filteredStocks.map((stock) => {
+            const isSelected = selectedSymbols.includes(stock.symbol);
+            const isPositive = stock.change >= 0;
 
-          return (
-            <motion.div
-              key={stock.symbol}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                isSelected
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-200 hover:border-gray-300 bg-white"
-              }`}
-              onClick={() => toggleSymbol(stock.symbol)}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg text-gray-800">
-                      {stock.symbol}
-                    </span>
-                    {isSelected && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-2 h-2 bg-blue-500 rounded-full"
-                      />
-                    )}
+            return (
+              <motion.div
+                key={stock.symbol}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`p-4 m-2 drop-shadow-xl bg-black/20 rounded-lg cursor-pointer transition-all ${
+                  isSelected ? "border border-gray-500" : ""
+                }`}
+                onClick={() => toggleSymbol(stock.symbol)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-lg ">{stock.symbol}</span>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 bg-blue-500 rounded-full"
+                        />
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600 truncate">
+                      {stock.name}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 truncate">{stock.name}</p>
+
+                  <div className="text-right">
+                    <div className="font-semibold text-gray-800">
+                      ${stock.price.toFixed(2)}
+                    </div>
+                    <div
+                      className={`flex items-center text-sm ${
+                        isPositive ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {isPositive ? (
+                        <TrendingUp className="w-3 h-3 mr-1" />
+                      ) : (
+                        <TrendingDown className="w-3 h-3 mr-1" />
+                      )}
+                      {isPositive ? "+" : ""}
+                      {stock.change.toFixed(2)} ({isPositive ? "+" : ""}
+                      {stock.changePercent.toFixed(2)}%)
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="text-right">
-                  <div className="font-semibold text-gray-800">
-                    ${stock.price.toFixed(2)}
-                  </div>
-                  <div className={`flex items-center text-sm ${
-                    isPositive ? "text-green-600" : "text-red-600"
-                  }`}>
-                    {isPositive ? (
-                      <TrendingUp className="w-3 h-3 mr-1" />
-                    ) : (
-                      <TrendingDown className="w-3 h-3 mr-1" />
-                    )}
-                    {isPositive ? "+" : ""}
-                    {stock.change.toFixed(2)} ({isPositive ? "+" : ""}
-                    {stock.changePercent.toFixed(2)}%)
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          );
+              </motion.div>
+            );
           })}
         </div>
       )}
