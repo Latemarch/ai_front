@@ -16,3 +16,10 @@ interface ChatRequest {
   }>;
   system_prompt?: string;
 }
+
+interface ClientSession {
+  chatRequest?: ChatRequest;
+  symbols?: Array<string>;
+  tools?: Array<string>;
+  period?: [number, number]; //unix time stamp
+}

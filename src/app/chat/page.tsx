@@ -1,5 +1,5 @@
 import AIChatCard from "@/components/AIChatCard";
-import SymbolSelection from "./components/SymbolSelection";
+import SymbolSelector from "./components/SymbolSelector";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
       {/* Right Panel - Backtest Tools */}
       <div className="w-1/2 p-4">
         <div className="h-full">
-          <SymbolSelection />
+          <SymbolSelector />
         </div>
       </div>
     </div>
