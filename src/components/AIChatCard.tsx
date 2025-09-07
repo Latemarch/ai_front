@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/hooks/useChat";
+import ReactMarkdown from "react-markdown";
 
 export default function AIChatCard({ className }: { className?: string }) {
   const { messages, isLoading, error, sendMessage } = useChat([
@@ -100,7 +101,29 @@ export default function AIChatCard({ className }: { className?: string }) {
                 msg.error && "border border-red-500/50"
               )}
             >
-              {msg.text}
+              {msg.sender === "ai" ? (
+                <div className="prose prose-sm prose-invert max-w-none">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                      strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+                      li: ({ children }) => <li className="mb-1">{children}</li>,
+                      h1: ({ children }) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
+                      h2: ({ children }) => <h2 className="text-base font-bold mb-2">{children}</h2>,
+                      h3: ({ children }) => <h3 className="text-sm font-bold mb-2">{children}</h3>,
+                      code: ({ children }) => <code className="bg-white/10 px-1 py-0.5 rounded text-xs">{children}</code>,
+                      pre: ({ children }) => <pre className="bg-white/10 p-2 rounded mb-2 overflow-x-auto">{children}</pre>,
+                    }}
+                  >
+                    {msg.text}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                msg.text
+              )}
             </motion.div>
           ))}
 

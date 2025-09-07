@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     const aiResponse = await response.json();
+    console.log(message, aiResponse);
 
     return NextResponse.json({
       message:
