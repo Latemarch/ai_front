@@ -78,7 +78,7 @@ const parseCSVData = async (): Promise<Stock[]> => {
   }
 };
 
-export default function SymbolSelection() {
+export default function SymbolSelector() {
   const [selectedSymbols, setSelectedSymbols] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [allStocks, setAllStocks] = useState<Stock[]>([]);
