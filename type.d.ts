@@ -22,4 +22,5 @@ interface ClientSession {
   symbols?: Array<string>;
   tools?: Array<string>;
   period?: [number, number]; //unix time stamp
+  language?: 'ko' | 'en' | 'ja' | 'zh' | 'es' | 'fr' | 'de'; //user preferred language
 }
