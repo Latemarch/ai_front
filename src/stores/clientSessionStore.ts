@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { ko } from '@/lib/i18n/ko';
-import { en } from '@/lib/i18n/en';
+import { ko } from "@/lib/i18n/ko";
+import { en } from "@/lib/i18n/en";
 
 interface ClientSessionState {
   // Session data
@@ -9,7 +9,7 @@ interface ClientSessionState {
   symbols?: Array<string>;
   tools?: Array<string>;
   period?: [number, number]; // unix timestamp
-  language?: 'ko' | 'en' | 'ja' | 'zh' | 'es' | 'fr' | 'de'; // user preferred language
+  language?: "ko" | "en" | "ja" | "zh" | "es" | "fr" | "de"; // user preferred language
 }
 
 interface ClientSessionActions {
@@ -39,7 +39,9 @@ interface ClientSessionActions {
   clearPeriod: () => void;
 
   // Language actions
-  setLanguage: (language: 'ko' | 'en' | 'ja' | 'zh' | 'es' | 'fr' | 'de') => void;
+  setLanguage: (
+    language: "ko" | "en" | "ja" | "zh" | "es" | "fr" | "de"
+  ) => void;
   clearLanguage: () => void;
 
   // Session actions
@@ -58,7 +60,7 @@ export const useClientSessionStore = create<ClientSessionStore>()(
         symbols: [],
         tools: [],
         period: undefined,
-        language: 'ko', // default language
+        language: "ko", // default language
 
         // Chat Request actions
         setChatRequest: (chatRequest: ChatRequest) =>
@@ -155,10 +157,11 @@ export const useClientSessionStore = create<ClientSessionStore>()(
         clearPeriod: () => set({ period: undefined }, false, "clearPeriod"),
 
         // Language actions
-        setLanguage: (language: 'ko' | 'en' | 'ja' | 'zh' | 'es' | 'fr' | 'de') =>
-          set({ language }, false, "setLanguage"),
+        setLanguage: (
+          language: "ko" | "en" | "ja" | "zh" | "es" | "fr" | "de"
+        ) => set({ language }, false, "setLanguage"),
 
-        clearLanguage: () => set({ language: 'ko' }, false, "clearLanguage"),
+        clearLanguage: () => set({ language: "ko" }, false, "clearLanguage"),
 
         // Session actions
         resetSession: () =>
@@ -273,7 +276,10 @@ export const usePeriodActions = () => {
     setPeriod([startTimestamp, endTimestamp]);
   };
 
-  const setPeriodFromTimestamps = (startTimestamp: number, endTimestamp: number) => {
+  const setPeriodFromTimestamps = (
+    startTimestamp: number,
+    endTimestamp: number
+  ) => {
     setPeriod([startTimestamp, endTimestamp]);
   };
 
@@ -289,13 +295,13 @@ export const usePeriodActions = () => {
   // 포맷된 날짜 문자열 반환
   const getFormattedPeriod = () => {
     if (!period) return null;
-    
+
     const startDate = getStartDate();
     const endDate = getEndDate();
-    
+
     return {
-      start: startDate?.toISOString().split('T')[0], // YYYY-MM-DD
-      end: endDate?.toISOString().split('T')[0],
+      start: startDate?.toISOString().split("T")[0], // YYYY-MM-DD
+      end: endDate?.toISOString().split("T")[0],
       startDate,
       endDate,
     };
@@ -321,7 +327,7 @@ export const useLanguageActions = () => {
   const { language, setLanguage } = useClientSessionStore();
 
   return {
-    language: language || 'ko',
+    language: language || "ko",
     setLanguage,
   };
 };
@@ -329,9 +335,9 @@ export const useLanguageActions = () => {
 // i18n 직접 사용 헬퍼 함수
 export const useI18n = () => {
   const { language, setLanguage } = useClientSessionStore();
-  
+
   // 번역 파일들은 상단에서 import
-  
+
   const translations = {
     ko,
     en,
@@ -342,12 +348,13 @@ export const useI18n = () => {
     fr: en, // 임시로 영어 사용
     de: en, // 임시로 영어 사용
   };
-  
-  const currentLang = language || 'ko';
-  
+
+  const currentLang = language || "ko";
+
   return {
     language: currentLang,
-    translations: translations[currentLang as keyof typeof translations] || translations.ko,
+    translations:
+      translations[currentLang as keyof typeof translations] || translations.ko,
     setLanguage,
   };
 };

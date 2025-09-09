@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { useI18n } from "@/stores/useClientSessionStore";
+import { useI18n } from "@/stores/clientSessionStore";
 
 function HomeContent() {
   const { translations } = useI18n();

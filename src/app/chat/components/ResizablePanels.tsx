@@ -3,6 +3,7 @@
 import { useState } from "react";
 import AIChatCard from "@/components/AIChatCard";
 import SymbolSelector from "./SymbolSelector";
+import RightPenel from "./RightPenel";
 
 export default function ResizablePanels() {
   const [leftWidth, setLeftWidth] = useState(50);
@@ -47,7 +48,8 @@ export default function ResizablePanels() {
       {/* Right Panel - Backtest Tools */}
       <div className="p-4" style={{ width: `${100 - leftWidth}%` }}>
         <div className="h-full">
-          <SymbolSelector />
+          <RightPenel />
+          {/* <SymbolSelector /> */}
         </div>
       </div>
     </div>

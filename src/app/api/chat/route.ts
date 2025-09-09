@@ -11,7 +11,7 @@ interface ChatRequest {
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, conversation_history, system_prompt } =
+    const { message, conversation_history, system_prompt} =
       (await request.json()) as ChatRequest;
 
     if (!message?.trim()) {

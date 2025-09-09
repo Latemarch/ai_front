@@ -1,18 +1,18 @@
 "use client";
 
-import { useLanguageActions } from '@/stores/useClientSessionStore';
-import { Language } from '@/types/i18n';
-import { motion } from 'motion/react';
-import { useState, useRef, useEffect } from 'react';
+import { useLanguageActions } from "@/stores/clientSessionStore";
+import { Language } from "@/types/i18n";
+import { motion } from "motion/react";
+import { useState, useRef, useEffect } from "react";
 
 const languageOptions = [
-  { code: 'ko' as Language, name: '한국어', flag: '🇰🇷' },
-  { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
-  { code: 'ja' as Language, name: '日本語', flag: '🇯🇵' },
-  { code: 'zh' as Language, name: '中文', flag: '🇨🇳' },
-  { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
-  { code: 'fr' as Language, name: 'Français', flag: '🇫🇷' },
-  { code: 'de' as Language, name: 'Deutsch', flag: '🇩🇪' },
+  { code: "ko" as Language, name: "한국어", flag: "🇰🇷" },
+  { code: "en" as Language, name: "English", flag: "🇺🇸" },
+  { code: "ja" as Language, name: "日本語", flag: "🇯🇵" },
+  { code: "zh" as Language, name: "中文", flag: "🇨🇳" },
+  { code: "es" as Language, name: "Español", flag: "🇪🇸" },
+  { code: "fr" as Language, name: "Français", flag: "🇫🇷" },
+  { code: "de" as Language, name: "Deutsch", flag: "🇩🇪" },
 ];
 
 export default function LanguageSelector() {
@@ -20,17 +20,22 @@ export default function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languageOptions.find(lang => lang.code === language) || languageOptions[0];
+  const currentLanguage =
+    languageOptions.find((lang) => lang.code === language) ||
+    languageOptions[0];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLanguageSelect = (lang: Language) => {
@@ -58,7 +63,12 @@ export default function LanguageSelector() {
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </motion.svg>
         </motion.button>
 
@@ -76,12 +86,14 @@ export default function LanguageSelector() {
                 key={lang.code}
                 onClick={() => handleLanguageSelect(lang.code)}
                 className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-white/20 transition-all ${
-                  language === lang.code ? 'bg-white/10' : ''
+                  language === lang.code ? "bg-white/10" : ""
                 }`}
-                whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
               >
                 <span className="text-base">{lang.flag}</span>
-                <span className="text-sm font-medium text-white">{lang.name}</span>
+                <span className="text-sm font-medium text-white">
+                  {lang.name}
+                </span>
                 {language === lang.code && (
                   <motion.div
                     initial={{ scale: 0 }}
