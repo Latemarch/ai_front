@@ -1,6 +1,7 @@
 import React from "react";
 import SymbolSelector from "./SymbolSelector";
 import { DateRangeSelector } from "./DateRangeSelector";
+import LineChart from "@/components/D3/LineChart";
 
 export default function RightPenel() {
   return (
@@ -9,11 +10,13 @@ export default function RightPenel() {
         <h3 className="text-sm font-medium mb-2">Symbol</h3>
         <SymbolSelector />
       </div>
-      
+
       <div>
         <h3 className="text-sm font-medium mb-2">Date Range</h3>
         <DateRangeSelector />
       </div>
+
+      <LineChart width={400} height={200} />
     </div>
   );
 }
