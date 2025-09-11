@@ -65,18 +65,43 @@ export default function LineChart({
       .y((d) => y(d.y))
       .curve(d3.curveMonotoneX);
 
-    g.append("g")
+    const xAxis = g
+      .append("g")
+      .attr("class", "x-axis")
       .attr("transform", `translate(0,${innerHeight})`)
       .call(d3.axisBottom(x));
 
     g.append("g").call(d3.axisLeft(y));
 
-    g.append("path")
+    const linePath = g
+      .append("path")
       .datum(data)
+      .attr("class", "line-path")
       .attr("fill", "none")
       .attr("stroke", "#3b82f6")
       .attr("stroke-width", 2)
       .attr("d", line);
+
+    const handleZoom = (event: any) => {
+      const rescaledX = event.transform.rescaleX(x);
+
+      // x축 업데이트
+      xAxis.call(d3.axisBottom(rescaledX));
+
+      // 라인 path 업데이트 (x축만)
+      const newLine = d3
+        .line<DataPoint>()
+        .x((d) => rescaledX(d.x))
+        .y((d) => y(d.y))
+        .curve(d3.curveMonotoneX);
+
+      linePath.attr("d", newLine);
+    };
+
+    // const zoom = d3
+    //   .zoom()
+    //   .on("zoom", handleZoom);
+    // svg.call(zoom as any);
   }, [data, width, height]);
 
   return <svg ref={svgRef}></svg>;

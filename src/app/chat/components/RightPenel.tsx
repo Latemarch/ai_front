@@ -2,6 +2,7 @@ import React from "react";
 import SymbolSelector from "./SymbolSelector";
 import { DateRangeSelector } from "./DateRangeSelector";
 import LineChart from "@/components/D3/LineChart";
+import AnalysisButton from "./AnalysisButton";
 
 export default function RightPenel() {
   return (
@@ -17,6 +18,7 @@ export default function RightPenel() {
       </div>
 
       <LineChart width={400} height={200} />
+      <AnalysisButton />
     </div>
   );
 }
