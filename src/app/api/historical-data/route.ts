@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import yahooFinance from 'yahoo-finance2';
+import { getCacheKey, getCachedData, setCachedData } from '@/lib/cache';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +16,15 @@ export async function POST(request: NextRequest) {
     const defaultStartDate = startDate || '2010-01-01';
     const defaultEndDate = endDate || '2024-12-31';
 
+    // 캐시 확인
+    const cacheKey = getCacheKey(symbol, defaultStartDate, defaultEndDate);
+    const cachedData = getCachedData(cacheKey);
+    
+    if (cachedData) {
+      console.log(`Returning cached data for ${symbol} from ${defaultStartDate} to ${defaultEndDate}`);
+      return NextResponse.json(cachedData);
+    }
+
     const queryOptions = {
       period1: new Date(defaultStartDate),
       period2: new Date(defaultEndDate),
@@ -23,20 +33,25 @@ export async function POST(request: NextRequest) {
 
     console.log(`Fetching ${symbol} data from ${defaultStartDate} to ${defaultEndDate}...`);
     
-    const result = await yahooFinance.historical(symbol, queryOptions);
+    const result = await yahooFinance.chart(symbol, queryOptions);
     
-    const sortedData = result.sort((a, b) => {
+    const sortedData = result.quotes.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
 
-    return NextResponse.json({
+    const responseData = {
       success: true,
       symbol,
       startDate: defaultStartDate,
       endDate: defaultEndDate,
       count: sortedData.length,
       data: sortedData
-    });
+    };
+
+    // 캐시에 저장
+    setCachedData(cacheKey, responseData);
+
+    return NextResponse.json(responseData);
 
   } catch (error) {
     console.error('Error fetching historical data:', error);
