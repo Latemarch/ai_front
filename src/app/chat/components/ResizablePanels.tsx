@@ -35,20 +35,20 @@ export default function ResizablePanels() {
   return (
     <div className="flex w-full h-full text-white">
       {/* Left Panel - AI Chat */}
-      <div className="p-4" style={{ width: `${leftWidth}%` }}>
+      <div className="" style={{ width: `${leftWidth}%` }}>
         <AIChatCard />
       </div>
 
       {/* Resizer */}
       <div
-        className="w-1 bg-gray-600 hover:bg-gray-400 cursor-col-resize flex-shrink-0"
+        className="w-[4px] border-l border-gray-600 hover:border-gray-400 cursor-col-resize flex-shrink-0"
         onMouseDown={handleResize}
       />
 
       {/* Right Panel - Backtest Tools */}
       <div className="p-4" style={{ width: `${100 - leftWidth}%` }}>
         <div className="h-full">
-          <RightPenel />
+          {/* <RightPenel /> */}
           {/* <SymbolSelector /> */}
         </div>
       </div>

@@ -32,7 +32,7 @@ export default function RootLayout({
         <div className="fixed -z-10 inset-0 bg-gradient-to-br from-[#0D3E4E] via-[#0D3E4E] to-slate-800"></div>
         <QueryProvider>
           <div className="flex flex-col h-dvh">
-            <Header />
+            {/* <Header /> */}
             {children}
           </div>
         </QueryProvider>
